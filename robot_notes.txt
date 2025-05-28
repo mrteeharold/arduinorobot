@@ -1,3 +1,5 @@
 https://gm0.org/en/latest/docs/software/concepts/odometry.html
 https://www.youtube.com/watch?v=oQQpAACa3ac&t=2412s
 https://rossum.sourceforge.net/papers/DiffSteer/
+https://roboticsbackend.com/arduino-object-oriented-programming-oop/
+https://github.com/br3ttb/Arduino-PID-Library/blob/master/examples/PID_AdaptiveTunings/PID_AdaptiveTunings.ino
