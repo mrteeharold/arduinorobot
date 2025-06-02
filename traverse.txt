@@ -1,0 +1,135 @@
+A adjacency matrix presents connections between nodes in a arbitrary tree.
+
+Here is a instance of adjacency matrix which presents a undirected graph:
+
+  1 2 3 4
+1 0 1 1 0
+2 1 0 1 0
+3 1 1 0 0
+4 0 0 0 0
+This matrix presents a graph where nodes 1 and 2 are connected, 1 and 3 are connected, 2 and 3 are connected.
+
+How to bruteforce all combinations of possible paths in such a graph using this kind of matrix? I mean that picking just node 1 is a separate combination. Then, say, 1-2 is a separate combination. 1-2-3; 3-1-2. But 1-2-3-1 is not possible, because of double picking the same node.
+
+So how to bruteforce all combinations using these rules?
+
+I prefer C#, C++ or Java language samples)
+
+algorithmtreegraph-algorithm
+Share
+asked Mar 27, 2013 at 6:12
+EngineerSpock's user avatar
+EngineerSpock
+2,67544 gold badges4040 silver badges6060 bronze badges
+A simple recursion will do the trick. Mark the nodes you have already visited so that you don't visit them again. Btw. the graph is not necessarily a tree, your example is not. – 
+Henry
+ CommentedMar 27, 2013 at 6:24
+2 Answers
+Sorted by:
+
+Highest score (default)
+5
+
+Given the constraints of your example it doesn't take more than some 40 lines to code.
+
+Essentially you just keep visiting nodes connected to the one you are currently inspecting. Tracking backing once you figure out there are no new nodes to visit.
+
+Additionally you'll need some means to keep track of the path you traveled to the current node. In the example I just put this info onto the stack to safe me from some memory management headache.
+
+#include <stdio.h>
+
+#define N_NODES 4
+#define NAME_OFFSET 1
+
+int edges[N_NODES][N_NODES] = {
+    { 0, 1, 1, 0 },
+    { 1, 0, 1, 0 },
+    { 1, 1, 0, 0 },
+    { 0, 0, 0, 0 }
+};
+
+int visited[N_NODES] = { 0, 0, 0, 0 };
+
+struct Node {
+    int node;
+    struct Node *prev;
+};
+
+void visit(int node, struct Node *prev_node) {
+    struct Node n = { node, prev_node };
+    struct Node *p = &n;
+
+    do 
+        printf("%d%s", p->node + NAME_OFFSET, (p->prev != NULL)?  "->" : "\n");
+    while ((p = p->prev) != NULL);
+
+    visited[node]=1;
+    int i;
+    for (i = 0; i < N_NODES; ++i)
+        if ((visited[i] == 0) && (edges[node][i] == 1))
+            visit(i, &n);
+    visited[node] = 0;
+}
+
+int main (int argc, char *argv[]) {
+    int i;
+    for (i = 0; i < N_NODES; ++i) {
+        visit(i, NULL);
+    }
+    return 0;
+}
+Produces:
+
+1
+2->1
+3->2->1
+3->1
+2->3->1
+2
+1->2
+3->1->2
+3->2
+1->3->2
+3
+1->3
+2->1->3
+2->3
+1->2->3
+4
+I guess that's what you were looking for.
+
+Share
+edited Oct 31, 2014 at 1:23
+Mr. Polywhirl's user avatar
+Mr. Polywhirl
+49k1212 gold badges9494 silver badges147147 bronze badges
+answered Mar 27, 2013 at 7:05
+mikyra's user avatar
+mikyra
+10.4k11 gold badge4343 silver badges4141 bronze badges
+2
+
+It looks as though you're using an undirected graph and you probably want a non-cyclic path.
+
+The 2 easiest options you have are to do a breadth-first or depth-first walk over the graph. What I would do is write a recursive method (depth-first) something like this:
+
+public void recurse(int node) {
+    System.out.print("-> " + node);
+    for (int i = node; i < num_nodes; ++i) {
+        if (i == node)
+            continue;
+        if (graph[node][i] > 0)
+            recurse(i);
+    }
+}
+then you just iterate through the nodes and call recurse(node) on each starting node. I hope that helps.
+
+Share
+edited Oct 31, 2014 at 1:24
+Mr. Polywhirl's user avatar
+Mr. Polywhirl
+49k1212 gold badges9494 silver badges147147 bronze badges
+answered Mar 27, 2013 at 6:25
+Mike T's user avatar
+Mike T
+4,7954
