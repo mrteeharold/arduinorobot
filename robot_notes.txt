@@ -3,3 +3,5 @@ https://www.youtube.com/watch?v=oQQpAACa3ac&t=2412s
 https://rossum.sourceforge.net/papers/DiffSteer/
 https://roboticsbackend.com/arduino-object-oriented-programming-oop/
 https://github.com/br3ttb/Arduino-PID-Library/blob/master/examples/PID_AdaptiveTunings/PID_AdaptiveTunings.ino
+#zet in .bashrc voor de onleesbare blauwe dir kleur
+LS_COLORS=$LS_COLORS:'di=38;5;123:' ; export LS_COLORS
